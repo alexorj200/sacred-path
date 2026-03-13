@@ -40,7 +40,7 @@ const Login = () => {
           </div>
           
           <h1 className="text-2xl md:text-3xl font-display text-center mb-2">
-            Bienvenido al Mosteiro São Bento
+            Bienvenido al Camino Sagrado de San Benito
           </h1>
           <p className="text-muted-foreground text-center mb-8 italic">
             Un camino espiritual guiado por la tradición monástica.
