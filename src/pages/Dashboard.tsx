@@ -91,7 +91,7 @@ const Dashboard = () => {
               </SidebarTrigger>
               <div className="flex items-center gap-2">
                 <img src={logoCross} alt="Logo" className="w-6 h-6 lg:hidden" />
-                <span className="font-display text-sm tracking-wide">Mosteiro São Bento</span>
+                <span className="font-display text-sm tracking-wide"><span className="font-display text-sm tracking-wide">Camino Sagrado</span></span>
               </div>
             </div>
           </header>

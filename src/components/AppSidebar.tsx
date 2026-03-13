@@ -34,7 +34,7 @@ export function AppSidebar() {
           <img src={logoCross} alt="Logo" className="w-8 h-8 flex-shrink-0" />
           {!collapsed && (
             <span className="font-display text-sm text-sidebar-foreground tracking-wide">
-              Mosteiro São Bento
+              Camino Sagrado
             </span>
           )}
         </div>
