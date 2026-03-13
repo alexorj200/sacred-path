@@ -25,7 +25,7 @@ const Login = () => {
         <div className="absolute inset-0 bg-monastery-dark/60" />
         <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-center">
           <img src={logoCross} alt="Cross" className="w-20 h-20 mb-6 opacity-90" />
-          <h2 className="font-display text-3xl text-parchment mb-3">Mosteiro São Bento</h2>
+          <h2 className="font-display text-3xl text-parchment mb-3">Camino Sagrado de San Benito</h2>
           <p className="text-gold-light font-body text-lg italic max-w-md">
             "Ora et Labora" — Reza y Trabaja
           </p>
