@@ -2,10 +2,12 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { Routes, Route } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
 import cardScripture from "@/assets/card-scripture.jpg";
 import cardJourney from "@/assets/card-journey.jpg";
 import cardPrayer from "@/assets/card-prayer.jpg";
+import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
 
 const featuredContent = [
   {
