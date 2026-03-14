@@ -18,9 +18,9 @@ interface ContentItem {
 }
 
 const tabIcon: Record<string, React.ReactNode> = {
-  videos: <Video className="h-4 w-4" />,
-  audios: <Headphones className="h-4 w-4" />,
-  libros: <BookOpen className="h-4 w-4" />,
+  video: <Video className="h-4 w-4" />,
+  audio: <Headphones className="h-4 w-4" />,
+  libro: <BookOpen className="h-4 w-4" />,
 };
 
 function ContentViewer({ item }: { item: ContentItem }) {
@@ -72,9 +72,7 @@ function ContentCard({
           alt={item.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        {completed && (
-          <CheckCircle className="absolute top-2 right-2 h-6 w-6 text-green-500" />
-        )}
+        {completed && <CheckCircle className="absolute top-2 right-2 h-6 w-6 text-green-500" />}
       </div>
       <div className="p-5">
         <h3 className="font-display text-lg mb-2">{item.title}</h3>
@@ -107,14 +105,12 @@ const BibliotecaEspiritual = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<ContentItem | null>(null);
   const [content, setContent] = useState<ContentItem[]>([]);
-  const [progress, setProgress] = useState<number[]>([]); // IDs de conteúdo completo
+  const [progress, setProgress] = useState<number[]>([]);
 
-  // Proteção de rota
   useEffect(() => {
     if (!user) navigate("/login");
   }, [user, navigate]);
 
-  // Carrega conteúdos do Supabase
   useEffect(() => {
     if (!user) return;
 
@@ -126,7 +122,6 @@ const BibliotecaEspiritual = () => {
       if (error) console.error(error);
       else setContent(contents || []);
 
-      // Carrega progresso do usuário
       const { data: progData, error: progError } = await supabase
         .from("progress")
         .select("content_id")
@@ -141,8 +136,7 @@ const BibliotecaEspiritual = () => {
 
   const handleComplete = async (item: ContentItem) => {
     if (!user) return;
-    const alreadyCompleted = progress.includes(item.id);
-    if (alreadyCompleted) return;
+    if (progress.includes(item.id)) return;
 
     const { error } = await supabase.from("progress").insert([
       { user_id: user.id, content_id: item.id, completed: true },
@@ -155,7 +149,7 @@ const BibliotecaEspiritual = () => {
   const filterByType = (type: ContentType) =>
     content.filter((c) => c.type === type);
 
-  if (!user) return null;
+  if (!user) return <p className="text-center mt-10">Cargando...</p>;
 
   return (
     <>
@@ -171,19 +165,19 @@ const BibliotecaEspiritual = () => {
 
         <Tabs defaultValue="video" className="w-full">
           <TabsList className="bg-card border border-border mb-8">
-            {["video", "audio", "libro"].map((tab) => (
+            {(["video", "audio", "libro"] as ContentType[]).map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab}
                 className="font-display tracking-wider data-[state=active]:bg-gold data-[state=active]:text-accent-foreground gap-2"
               >
-                {tabIcon[tab + "s"]}
+                {tabIcon[tab]}
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {["video", "audio", "libro"].map((type) => (
+          {(["video", "audio", "libro"] as ContentType[]).map((type) => (
             <TabsContent key={type} value={type}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filterByType(type).map((item) => (
@@ -195,6 +189,9 @@ const BibliotecaEspiritual = () => {
                     onComplete={() => handleComplete(item)}
                   />
                 ))}
+                {filterByType(type).length === 0 && (
+                  <p className="text-muted-foreground">No hay contenido disponible.</p>
+                )}
               </div>
             </TabsContent>
           ))}
