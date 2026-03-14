@@ -2,28 +2,33 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
 import cardScripture from "@/assets/card-scripture.jpg";
 import cardJourney from "@/assets/card-journey.jpg";
 import cardPrayer from "@/assets/card-prayer.jpg";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
+import { useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const featuredContent = [
   {
     image: cardScripture,
     title: "Lectio Divina",
-    description: "Descubre la antigua práctica de la lectura sagrada y cómo puede transformar tu vida espiritual.",
+    description:
+      "Descubre la antigua práctica de la lectura sagrada y cómo puede transformar tu vida espiritual.",
   },
   {
     image: cardJourney,
     title: "Camino Benedictino",
-    description: "Un recorrido de 30 días por la Regla de San Benito para cultivar la paz interior.",
+    description:
+      "Un recorrido de 30 días por la Regla de San Benito para cultivar la paz interior.",
   },
   {
     image: cardPrayer,
     title: "Liturgia de las Horas",
-    description: "Oraciones guiadas siguiendo el ritmo monástico de oración a lo largo del día.",
+    description:
+      "Oraciones guiadas siguiendo el ritmo monástico de oración a lo largo del día.",
   },
 ];
 
@@ -79,6 +84,18 @@ const DashboardHome = () => (
 );
 
 const Dashboard = () => {
+  const user = useAuth();
+  const navigate = useNavigate();
+
+  // Proteção de rota: redireciona se não logado
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  if (!user) return null; // não renderiza antes de validar
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -91,7 +108,7 @@ const Dashboard = () => {
               </SidebarTrigger>
               <div className="flex items-center gap-2">
                 <img src={logoCross} alt="Logo" className="w-6 h-6 lg:hidden" />
-                <span className="font-display text-sm tracking-wide"><span className="font-display text-sm tracking-wide">Camino Sagrado</span></span>
+                <span className="font-display text-sm tracking-wide">Camino Sagrado</span>
               </div>
             </div>
           </header>
