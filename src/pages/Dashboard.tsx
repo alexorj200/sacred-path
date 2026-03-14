@@ -122,6 +122,7 @@ const Dashboard = () => {
             <Routes>
               <Route index element={<DashboardHome />} />
               <Route path="biblioteca" element={<BibliotecaEspiritual />} />
+              <Route path="admin" element={<AdminPanel />} />
             </Routes>
           </main>
         </div>
