@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Volume2, FileText, Video, Headphones, BookOpen } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+
 import thumbVideo from "@/assets/thumb-video.jpg";
 import thumbAudio from "@/assets/thumb-audio.jpg";
 import thumbBook from "@/assets/thumb-book.jpg";
 
+// --- Tipos e mock ---
 type ContentType = "video" | "audio" | "libro";
 
 interface ContentItem {
@@ -73,6 +72,7 @@ const tabIcon: Record<string, React.ReactNode> = {
   libros: <BookOpen className="h-4 w-4" />,
 };
 
+// --- Visualizador de conteúdo ---
 function ContentViewer({ item }: { item: ContentItem }) {
   if (item.type === "video") {
     return (
@@ -92,7 +92,11 @@ function ContentViewer({ item }: { item: ContentItem }) {
           <p className="text-muted-foreground text-sm">Reproductor de audio</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button size="icon" variant="outline" className="border-gold text-gold hover:bg-gold hover:text-accent-foreground rounded-full h-10 w-10">
+          <Button
+            size="icon"
+            variant="outline"
+            className="border-gold text-gold hover:bg-gold hover:text-accent-foreground rounded-full h-10 w-10"
+          >
             <Play className="h-4 w-4 ml-0.5" />
           </Button>
           <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
@@ -112,6 +116,7 @@ function ContentViewer({ item }: { item: ContentItem }) {
   );
 }
 
+// --- Card de conteúdo ---
 function ContentCard({ item, onOpen }: { item: ContentItem; onOpen: () => void }) {
   return (
     <div className="group bg-card rounded-lg overflow-hidden shadow-warm hover:shadow-gold transition-shadow duration-300">
@@ -155,11 +160,20 @@ function ContentCard({ item, onOpen }: { item: ContentItem; onOpen: () => void }
   );
 }
 
+// --- BibliotecaEspiritual com proteção de rota ---
 const BibliotecaEspiritual = () => {
+  const user = useAuth();
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<ContentItem | null>(null);
 
-  const filterByType = (type: ContentType) =>
-    mockContent.filter((c) => c.type === type);
+  // Proteção de rota
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
+  if (!user) return null;
+
+  const filterByType = (type: ContentType) => mockContent.filter((c) => c.type === type);
 
   return (
     <>
