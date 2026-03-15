@@ -22,7 +22,7 @@ interface ContentItem {
 }
 
 const AdminPanel = () => {
-  const { user, loading } = useAuth("admin");
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   const [users, setUsers] = useState<UserProfile[]>([]);
