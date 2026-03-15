@@ -4,85 +4,85 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
-import cardScripture from "@/assets/card-scripture.jpg";
-import cardJourney from "@/assets/card-journey.jpg";
-import cardPrayer from "@/assets/card-prayer.jpg";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
 import AdminPanel from "@/pages/AdminPanel";
 import { useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
-const featuredContent = [
+import { Shield, TrendingUp, KeyRound, Sparkles } from "lucide-react";
+
+const courses = [
   {
-    image: cardScripture,
-    title: "Lectio Divina",
-    description:
-      "Descubre la antigua práctica de la lectura sagrada y cómo puede transformar tu vida espiritual.",
-    link: "/biblioteca",
+    title: "Camino de Protección",
+    description: "Aprende a cubrir tu vida y tu familia con la armadura espiritual que Dios ha preparado para ti.",
+    icon: Shield,
+    color: "from-primary to-primary/70",
   },
   {
-    image: cardJourney,
-    title: "Camino Benedictino",
-    description:
-      "Un recorrido de 30 días por la Regla de San Benito para cultivar la paz interior.",
-    link: "/biblioteca",
+    title: "Camino de Prosperidad",
+    description: "Descubre los principios bíblicos de abundancia y mayordomía fiel para transformar tu vida.",
+    icon: TrendingUp,
+    color: "from-accent to-accent/70",
   },
   {
-    image: cardPrayer,
-    title: "Liturgia de las Horas",
-    description:
-      "Oraciones guiadas siguiendo el ritmo monástico de oración a lo largo del día.",
-    link: "/biblioteca",
+    title: "Camino de Liberación",
+    description: "Un recorrido guiado para romper cadenas y vivir en la libertad que Cristo ofrece.",
+    icon: KeyRound,
+    color: "from-sidebar-background to-sidebar-accent",
+  },
+  {
+    title: "Camino de Milagros",
+    description: "Fortalece tu fe y abre tu corazón a lo sobrenatural a través de la oración y la Palabra.",
+    icon: Sparkles,
+    color: "from-ring to-ring/60",
   },
 ];
 
 const DashboardHome = () => {
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "peregrino";
 
   return (
     <>
       <div className="mb-10 animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-display mb-3 text-gold">
-          Paz y Bendición
+        <h1 className="text-3xl md:text-4xl font-display mb-2 text-foreground">
+          Paz y Bendición, <span className="text-accent">{displayName}</span>
         </h1>
         <p className="text-muted-foreground max-w-2xl text-base leading-relaxed">
-          Bienvenido a tu espacio espiritual. Aquí encontrarás enseñanzas, oraciones y caminos
-          de crecimiento inspirados por la tradición de San Benito.
+          Bienvenido a tu espacio espiritual. Aquí encontrarás caminos de crecimiento, enseñanzas y oraciones para transformar tu vida.
         </p>
       </div>
 
       <section className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
         <h2 className="text-xl font-display mb-6 flex items-center gap-2">
-          <span className="w-8 h-px bg-gold inline-block" />
-          Contenido destacado
+          <span className="w-8 h-px bg-accent inline-block" />
+          Cursos espirituales
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredContent.map((item) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {courses.map((course) => (
             <div
-              key={item.title}
-              className="group bg-card rounded-lg overflow-hidden shadow-warm hover:shadow-gold transition-shadow duration-300"
+              key={course.title}
+              className="group bg-card rounded-lg overflow-hidden border border-border hover:border-accent/50 transition-all duration-300 hover:shadow-lg"
             >
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-5">
-                <h3 className="font-display text-lg mb-2">{item.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                  {item.description}
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(item.link)}
-                  className="border-gold text-gold hover:bg-gold hover:text-accent-foreground font-display tracking-wider transition-colors"
-                >
-                  Ver
-                </Button>
+              <div className={`h-2 bg-gradient-to-r ${course.color}`} />
+              <div className="p-6 flex gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-secondary flex items-center justify-center">
+                  <course.icon className="h-6 w-6 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-display text-lg mb-1 text-foreground">{course.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                    {course.description}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-accent text-accent hover:bg-accent hover:text-accent-foreground font-display tracking-wider transition-colors"
+                  >
+                    Comenzar
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
