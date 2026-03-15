@@ -93,7 +93,7 @@ const DashboardHome = () => {
 };
 
 const Dashboard = () => {
-  const user = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
