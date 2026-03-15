@@ -7,14 +7,14 @@ import { Play, Volume2, FileText, Video, Headphones, BookOpen, CheckCircle } fro
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../services/supabaseService";
 
-type ContentType = "video" | "audio" | "libro";
+type ContentCategory = "video" | "audio" | "libro";
 
 interface ContentItem {
-  id: number;
-  type: ContentType;
+  id: string;
+  category: string;
   title: string;
-  description: string;
-  thumbnail: string;
+  description: string | null;
+  thumbnail: string | null;
 }
 
 const tabIcon: Record<string, React.ReactNode> = {
@@ -24,7 +24,7 @@ const tabIcon: Record<string, React.ReactNode> = {
 };
 
 function ContentViewer({ item }: { item: ContentItem }) {
-  if (item.type === "video") {
+  if (item.category === "video") {
     return (
       <div className="aspect-video bg-primary/10 rounded-lg flex flex-col items-center justify-center gap-3">
         <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
@@ -34,7 +34,7 @@ function ContentViewer({ item }: { item: ContentItem }) {
       </div>
     );
   }
-  if (item.type === "audio") {
+  if (item.category === "audio") {
     return (
       <div className="space-y-4">
         <div className="aspect-[3/1] bg-primary/10 rounded-lg flex flex-col items-center justify-center gap-3">
@@ -68,7 +68,7 @@ function ContentCard({
     <div className="group bg-card rounded-lg overflow-hidden shadow-warm hover:shadow-gold transition-shadow duration-300 relative">
       <div className="aspect-[16/10] overflow-hidden relative">
         <img
-          src={item.thumbnail}
+          src={item.thumbnail || "/placeholder.svg"}
           alt={item.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -101,11 +101,11 @@ function ContentCard({
 }
 
 const BibliotecaEspiritual = () => {
-  const user = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [selected, setSelected] = useState<ContentItem | null>(null);
   const [content, setContent] = useState<ContentItem[]>([]);
-  const [progress, setProgress] = useState<number[]>([]);
+  const [progress, setProgress] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -118,7 +118,7 @@ const BibliotecaEspiritual = () => {
       const { data: contents, error } = await supabase
         .from("content")
         .select("*")
-        .order("id", { ascending: true });
+        .order("created_at", { ascending: true });
       if (error) console.error(error);
       else setContent(contents || []);
 
@@ -128,7 +128,7 @@ const BibliotecaEspiritual = () => {
         .eq("user_id", user.id);
 
       if (progError) console.error(progError);
-      else setProgress(progData.map((p: any) => p.content_id));
+      else setProgress((progData || []).map((p) => p.content_id));
     };
 
     loadContent();
@@ -146,8 +146,8 @@ const BibliotecaEspiritual = () => {
     else setProgress((prev) => [...prev, item.id]);
   };
 
-  const filterByType = (type: ContentType) =>
-    content.filter((c) => c.type === type);
+  const filterByCategory = (cat: ContentCategory) =>
+    content.filter((c) => c.category === cat);
 
   if (!user) return <p className="text-center mt-10">Cargando...</p>;
 
@@ -165,7 +165,7 @@ const BibliotecaEspiritual = () => {
 
         <Tabs defaultValue="video" className="w-full">
           <TabsList className="bg-card border border-border mb-8">
-            {(["video", "audio", "libro"] as ContentType[]).map((tab) => (
+            {(["video", "audio", "libro"] as ContentCategory[]).map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab}
@@ -177,10 +177,10 @@ const BibliotecaEspiritual = () => {
             ))}
           </TabsList>
 
-          {(["video", "audio", "libro"] as ContentType[]).map((type) => (
-            <TabsContent key={type} value={type}>
+          {(["video", "audio", "libro"] as ContentCategory[]).map((cat) => (
+            <TabsContent key={cat} value={cat}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filterByType(type).map((item) => (
+                {filterByCategory(cat).map((item) => (
                   <ContentCard
                     key={item.id}
                     item={item}
@@ -189,7 +189,7 @@ const BibliotecaEspiritual = () => {
                     onComplete={() => handleComplete(item)}
                   />
                 ))}
-                {filterByType(type).length === 0 && (
+                {filterByCategory(cat).length === 0 && (
                   <p className="text-muted-foreground">No hay contenido disponible.</p>
                 )}
               </div>

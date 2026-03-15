@@ -8,6 +8,7 @@ import cardScripture from "@/assets/card-scripture.jpg";
 import cardJourney from "@/assets/card-journey.jpg";
 import cardPrayer from "@/assets/card-prayer.jpg";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
+import AdminPanel from "@/pages/AdminPanel";
 import { useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
