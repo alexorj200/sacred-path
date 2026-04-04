@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { supabase } from "../services/supabaseService";
+
+
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -22,8 +22,8 @@ interface ContentItem {
 }
 
 const AdminPanel = () => {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
+  // const { user, loading } = useAuth(); // Removido autenticação
+
 
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [content, setContent] = useState<ContentItem[]>([]);
@@ -36,33 +36,17 @@ const AdminPanel = () => {
     thumbnail: "",
   });
 
-  useEffect(() => {
-    if (!loading && !user) navigate("/login");
-  }, [user, loading, navigate]);
+
 
   useEffect(() => {
-    if (!user) return;
-
+    // Lógica de carregamento de dados sem autenticação
     const loadData = async () => {
-      const { data: usersData, error: usersError } = await supabase
-        .from("profiles")
-        .select("id, email, name, role")
-        .order("created_at", { ascending: true });
-
-      if (usersError) console.error(usersError);
-      else setUsers(usersData || []);
-
-      const { data: contentData, error: contentError } = await supabase
-        .from("content")
-        .select("id, title, description, category, thumbnail")
-        .order("created_at", { ascending: true });
-
-      if (contentError) console.error(contentError);
-      else setContent(contentData || []);
+      // Simulação de dados de usuários e conteúdo, já que o Supabase foi removido
+      setUsers([]); // Ou carregar de uma fonte pública, se houver
+      setContent([]); // Ou carregar de uma fonte pública, se houver
     };
-
     loadData();
-  }, [user]);
+  }, []);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,18 +54,15 @@ const AdminPanel = () => {
 
   const handleSaveContent = async () => {
     if (editingContent) {
-      const { error } = await supabase
-        .from("content")
-        .update(formData)
-        .eq("id", editingContent.id);
-      if (error) console.error(error);
-      else setContent((prev) =>
+      // Lógica de atualização de conteúdo simulada
+      console.log("Atualizando conteúdo:", formData);
+      setContent((prev) =>
         prev.map((c) => (c.id === editingContent.id ? { ...c, ...formData } : c))
       );
     } else {
-      const { data, error } = await supabase.from("content").insert([formData]).select();
-      if (error) console.error(error);
-      else if (data && data[0]) setContent((prev) => [...prev, data[0]]);
+      // Lógica de inserção de conteúdo simulada
+      console.log("Inserindo conteúdo:", formData);
+      setContent((prev) => [...prev, { ...formData, id: Date.now().toString() }]); // Adiciona item com ID temporário
     }
 
     setShowDialog(false);
@@ -101,12 +82,13 @@ const AdminPanel = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("content").delete().eq("id", id);
-    if (error) console.error(error);
-    else setContent((prev) => prev.filter((c) => c.id !== id));
+    // Lógica de exclusão de conteúdo simulada
+    console.log("Excluindo conteúdo com ID:", id);
+
+    setContent((prev) => prev.filter((c) => c.id !== id)); // Lógica de exclusão de estado local
   };
 
-  if (!user) return <p>Loading...</p>;
+
 
   return (
     <div className="p-6">

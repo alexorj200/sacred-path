@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Volume2, FileText, Video, Headphones, BookOpen, CheckCircle } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
-import { supabase } from "../services/supabaseService";
+
+
 
 type ContentCategory = "video" | "audio" | "libro";
 
@@ -101,55 +101,32 @@ function ContentCard({
 }
 
 const BibliotecaEspiritual = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+
+
   const [selected, setSelected] = useState<ContentItem | null>(null);
   const [content, setContent] = useState<ContentItem[]>([]);
   const [progress, setProgress] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
+
 
   useEffect(() => {
-    if (!user) return;
-
     const loadContent = async () => {
-      const { data: contents, error } = await supabase
-        .from("content")
-        .select("*")
-        .order("created_at", { ascending: true });
-      if (error) console.error(error);
-      else setContent(contents || []);
-
-      const { data: progData, error: progError } = await supabase
-        .from("progress")
-        .select("content_id")
-        .eq("user_id", user.id);
-
-      if (progError) console.error(progError);
-      else setProgress((progData || []).map((p) => p.content_id));
+      // Simulação de carregamento de conteúdo sem Supabase
+      setContent([]); 
+      setProgress([]);
     };
-
     loadContent();
-  }, [user]);
+  }, []);
 
-  const handleComplete = async (item: ContentItem) => {
-    if (!user) return;
+  const handleComplete = (item: ContentItem) => {
     if (progress.includes(item.id)) return;
-
-    const { error } = await supabase.from("progress").insert([
-      { user_id: user.id, content_id: item.id, completed: true },
-    ]);
-
-    if (error) console.error(error);
-    else setProgress((prev) => [...prev, item.id]);
+    setProgress((prev) => [...prev, item.id]);
   };
 
   const filterByCategory = (cat: ContentCategory) =>
     content.filter((c) => c.category === cat);
 
-  if (!user) return <p className="text-center mt-10">Cargando...</p>;
+
 
   return (
     <>
