@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
 import AdminPanel from "@/pages/AdminPanel";
