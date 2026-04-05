@@ -1,7 +1,7 @@
-import { Home, BookOpen, Compass, HandHeart, Users, User, LogOut } from "lucide-react";
+import { Home, BookOpen, Compass, HandHeart, Users, User } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useLocation } from "react-router-dom";
+import logoCross from "@/assets/logo-cross.png";
 import logoCross from "@/assets/logo-cross.png";
 import {
   Sidebar,
