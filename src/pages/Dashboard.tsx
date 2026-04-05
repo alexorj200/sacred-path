@@ -2,12 +2,10 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
 import AdminPanel from "@/pages/AdminPanel";
-import { useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
 
 import { Shield, TrendingUp, KeyRound, Sparkles } from "lucide-react";
 
@@ -39,8 +37,7 @@ const courses = [
 ];
 
 const DashboardHome = () => {
-  const { user } = useAuth();
-  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "peregrino";
+  const displayName = "peregrino";
 
   return (
     <>
@@ -93,14 +90,6 @@ const DashboardHome = () => {
 };
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
-
-  if (!user) return <p className="text-center mt-10">Cargando...</p>;
 
   return (
     <SidebarProvider>
