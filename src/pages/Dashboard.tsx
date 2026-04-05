@@ -37,8 +37,7 @@ const courses = [
 ];
 
 const DashboardHome = () => {
-  const { user } = useAuth();
-  const displayName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "peregrino";
+  const displayName = "peregrino";
 
   return (
     <>
