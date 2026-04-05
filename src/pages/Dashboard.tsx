@@ -90,14 +90,6 @@ const DashboardHome = () => {
 };
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
-
-  if (!user) return <p className="text-center mt-10">Cargando...</p>;
 
   return (
     <SidebarProvider>
