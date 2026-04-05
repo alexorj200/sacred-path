@@ -6,8 +6,6 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import logoCross from "@/assets/logo-cross.png";
 import BibliotecaEspiritual from "@/pages/BibliotecaEspiritual";
 import AdminPanel from "@/pages/AdminPanel";
-import { useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
 
 import { Shield, TrendingUp, KeyRound, Sparkles } from "lucide-react";
 
